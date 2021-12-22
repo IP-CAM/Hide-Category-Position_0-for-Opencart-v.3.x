@@ -1,17 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <modification>
-    <name>Hide categories from menu</name>
-    <version>1</version>
-    <author>Vesel Karastoyanov</author>
-    <link>https://dataspot.org</link>
-    <code>hide-category-which-has-order-less-zero</code>
+    <name><![CDATA[Hide categories from menu sort order less than zero]]></name>
+    <version><![CDATA[1.0]]></version>
+    <author><![CDATA[REDS]]></author>
+    <link><![CDATA[https://www.prai.com.br]]></link>
+    <code><![CDATA[hide-category-which-has-order-less-zero]]></code>
     <description>Hide category that has sort order less than zero</description>
+		
 	<file path="catalog/model/catalog/category.php"> 
-		<operation>
+		<operation error="skip">
 			<search><![CDATA[
 				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.parent_id = '" . (int)$parent_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1' ORDER BY c.sort_order, LCASE(cd.name)");]]></search>
 			<add position="replace"><![CDATA[
 				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.parent_id = '" . (int)$parent_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1' AND c.sort_order >=0 ORDER BY c.sort_order, LCASE(cd.name)");]]></add>
-		</operation>	
-   </file>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[
+				$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "category` c LEFT JOIN `" . DB_PREFIX . "category_description` cd ON (c.category_id = cd.category_id) LEFT JOIN `" . DB_PREFIX . "category_to_store` c2s ON (c.category_id = c2s.category_id) WHERE c.parent_id = '" . (int)$parent_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1' ORDER BY c.sort_order, LCASE(cd.name)");
+			]]></search>
+			<add position="replace"><![CDATA[
+				$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "category` c 
+				LEFT JOIN `" . DB_PREFIX . "category_description` cd ON (c.category_id = cd.category_id) 
+				LEFT JOIN `" . DB_PREFIX . "category_to_store` c2s ON (c.category_id = c2s.category_id) 
+				WHERE c.parent_id = '" . (int)$parent_id . "' 
+				AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' 
+				AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'  
+				AND c.status = '1' 
+				AND c.sort_order >=0 
+				ORDER BY c.sort_order, 
+				LCASE(cd.name)");
+			]]></add>
+		</operation>
+  </file>
 </modification>
